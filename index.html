@@ -169,25 +169,6 @@
         }
 
         /* =========================================
-           CREAM/WARM TEXT
-        ========================================= */
-
-        .text-cream-gradient {
-            background:
-                linear-gradient(
-                    90deg,
-                    #fdfbf7,
-                    #f5e6a3,
-                    #e8d5b5,
-                    #fdfbf7
-                );
-
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        /* =========================================
            GLASS CONTACT ITEMS
         ========================================= */
 
@@ -390,6 +371,30 @@
         }
 
         /* =========================================
+           MODAL STYLES
+        ========================================= */
+
+        #locationModal {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        #locationModal.modal-show {
+            display: flex;
+            opacity: 1;
+        }
+
+        #locationModal .modal-content {
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        #locationModal.modal-show .modal-content {
+            transform: scale(1);
+        }
+
+        /* =========================================
            MOBILE
         ========================================= */
 
@@ -425,7 +430,6 @@
 
 
             <!-- LOGO -->
-            <!-- IMPORTANT: Save the image you uploaded as 'lemlem-logo.png' in the same folder as this HTML file, or change the src below -->
             <div class="logo-circle animate-float mb-5 overflow-hidden">
                 <img
                     src="lemlem-logo.png"
@@ -572,10 +576,11 @@
 
 
 
-                <!-- LOCATION -->
+                <!-- LOCATION (Click to open modal) -->
 
                 <div
-                    class="glass-item flex items-center p-3.5 rounded-2xl group cursor-default"
+                    onclick="openLocationModal()"
+                    class="glass-item flex items-center p-3.5 rounded-2xl group cursor-pointer"
                 >
 
                     <div class="
@@ -696,10 +701,65 @@
 
 
 
+    <!-- =========================================
+     LOCATION MODAL (PAY VERSION & QR CODE)
+========================================== -->
+<div id="locationModal" class="fixed inset-0 z-50 items-center justify-center p-4">
+    
+    <!-- Backdrop (Lightened) -->
+    <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="closeLocationModal()"></div>
+    
+    <!-- Modal Content -->
+    <div class="modal-content relative w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl glass-card border border-amber-500/50">
+        
+        <!-- Background Image (FULLY BRIGHT - NO OVERLAY) -->
+        <div class="absolute inset-0 z-0">
+            <!-- Removed opacity-70, removed the dark gradient div -->
+            <img src="pay-bg.jpg" alt="Background" class="w-full h-full object-cover">
+        </div>
+        
+        <!-- Content -->
+        <div class="relative z-10 p-6 text-center">
+            <button onclick="closeLocationModal()" class="absolute top-4 right-4 text-amber-300 hover:text-white transition">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+            
+            <!-- Removed drop-shadow -->
+            <h3 class="text-5xl font-serif-display text-gold-gradient mb-5">Pay Version</h3>
+            <p class="text-amber-100 text-sm mb-6">Scan the QR code below to upgrade to the premium business card experience.</p>
+            
+            <!-- QR Code -->
+            <div class="bg-white p-3 rounded-2xl inline-block mb-6 shadow-lg">
+                <img src="s2s.png" alt="Payment QR Code" class="w-36 h-36 object-contain rounded-xl">
+            </div>
+            
+            <p class="text-amber-200/80 text-xl tracking-wider uppercase">Tech19· South Africa</p>
+        </div>
+    </div>
+</div>
+
     <!-- VCARD SCRIPT -->
 
     <script>
 
+        // Modal Functions
+        function openLocationModal() {
+            const modal = document.getElementById('locationModal');
+            modal.classList.remove('hidden');
+            // Trigger reflow to allow transition
+            void modal.offsetWidth;
+            modal.classList.add('modal-show');
+        }
+
+        function closeLocationModal() {
+            const modal = document.getElementById('locationModal');
+            modal.classList.remove('modal-show');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300); // match duration
+        }
+
+        // VCard Download
         function downloadVCard() {
 
             const vCardData =
